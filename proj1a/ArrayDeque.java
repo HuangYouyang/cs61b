@@ -38,22 +38,20 @@ public class ArrayDeque<T> {
     public void addFirst(T item) {
         if (size >= a.length) {
             resize(size + size / 4);
-        } else if (size <= a.length / 4 && a.length >= 16) {
-            resize(size + size / 4);
         }
 
         a[sentinel.prev] = item;
         sentinel.prev = sentinel.prev - 1;
-        if (sentinel.prev < 0)
+        if (sentinel.prev < 0) {
             sentinel.prev = a.length - 1;
+        }
+
 
         size++;
     }
 
     public void addLast(T item) {
         if (size >= a.length) {
-            resize(size + size / 4);
-        } else if (size <= a.length / 4 && a.length >= 16) {
             resize(size + size / 4);
         }
 
@@ -64,16 +62,25 @@ public class ArrayDeque<T> {
     }
 
     public T removeFirst() {
-        if (size == 0) return null;
+        if (size == 0) {
+            return null;
+        }
 
         sentinel.prev = (sentinel.prev + 1) % a.length;
 
         size--;
+
+        if (size <= a.length / 4 && a.length >= 16) {
+            resize(size + size / 4);
+        }
+
         return a[sentinel.prev];
     }
 
     public T removeLast() {
-        if (size == 0) return null;
+        if (size == 0) {
+            return null;
+        }
 
         sentinel.next = (sentinel.next - 1);
         if (sentinel.next < 0) {
@@ -81,11 +88,18 @@ public class ArrayDeque<T> {
         }
 
         size--;
+
+        if (size <= a.length / 4 && a.length >= 16) {
+            resize(size + size / 4);
+        }
+
         return a[sentinel.next];
     }
 
     public T get(int index) {
-        if (index >= size) return null;
+        if (index >= size) {
+            return null;
+        }
 
         // right part
         int rightSize = a.length - sentinel.prev - 1;

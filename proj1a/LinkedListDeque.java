@@ -1,5 +1,3 @@
-import java.util.LinkedList;
-
 public class LinkedListDeque<T> {
 
     private class Node {
@@ -52,7 +50,9 @@ public class LinkedListDeque<T> {
     }
 
     public T removeFirst() {
-        if (size == 0) return null;
+        if (size == 0) {
+            return null;
+        }
         T res = headSentinel.next.item;
 
         headSentinel.next = headSentinel.next.next;
@@ -68,7 +68,9 @@ public class LinkedListDeque<T> {
     }
 
     public T removeLast() {
-        if (size == 0) return null;
+        if (size == 0) {
+            return null;
+        }
         T res = tailSentinel.prev.item;
 
         tailSentinel.prev = tailSentinel.prev.prev;
@@ -83,7 +85,9 @@ public class LinkedListDeque<T> {
     }
 
     public T get(int index) {
-        if (index > size) return (T) "null";
+        if (index > size) {
+            return (T) "null";
+        }
 
         Node curr = headSentinel.next;
         while (index > 0) {
@@ -95,14 +99,18 @@ public class LinkedListDeque<T> {
     }
 
     private T getRecursive(int index, Node curr) {
-        if (index == 0) return curr.item;
+        if (index == 0) {
+            return curr.item;
+        }
 
         index--;
         return getRecursive(index, curr.next);
     }
 
     public T getRecursive(int index) {
-        if (index > size) return (T) "null";
+        if (index > size) {
+            return (T) "null";
+        }
 
         return getRecursive(index, headSentinel.next);
     }
