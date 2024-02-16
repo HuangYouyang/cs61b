@@ -1,11 +1,11 @@
 public class ArrayDeque<T> {
     private class Node {
-        private int prev;
-        private int next;
+        private int nextFirst;
+        private int nextLast;
 
-        public Node(int p, int n) {
-            prev = p;
-            next = n;
+        public Node(int f, int l) {
+            nextFirst = f;
+            nextLast = l;
         }
     }
 
@@ -16,48 +16,45 @@ public class ArrayDeque<T> {
     public ArrayDeque() {
         size = 0;
         a = (T[]) new Object[8];
-        sentinel = new Node(7, 0);
+        sentinel = new Node(4, 5);
     }
 
     private void resize(int capacity) {
         T[] newA = (T[]) new Object[capacity];
+        int startPos = (capacity - size) / 2;
+        int cur = startPos;
 
-        if (sentinel.prev < sentinel.next) {
-            System.arraycopy(a, sentinel.prev + 1, newA, 0, sentinel.next - sentinel.prev - 1);
-            sentinel.prev = capacity - 1;
-            sentinel.next = 0;
-        } else {
-            System.arraycopy(a, 0, newA, 0, sentinel.next); // left part
-            System.arraycopy(a, sentinel.next, newA, capacity - (size - sentinel.next), size - sentinel.next); // right part
-            sentinel.prev = capacity - (size - sentinel.next) - 1;
+        int num = size;
+        while (num > 0) {
+            num--;
+            sentinel.nextFirst = (sentinel.nextFirst + 1) % a.length;
+            newA[cur++] = a[sentinel.nextFirst];
         }
+        sentinel.nextFirst = startPos - 1;
+        sentinel.nextLast = startPos + size;
 
         a = newA;
     }
 
     public void addFirst(T item) {
         if (size >= a.length) {
-            resize(size + size / 4);
+            resize(size + size / 4 * 3);
         }
-
-        a[sentinel.prev] = item;
-        sentinel.prev = sentinel.prev - 1;
-        if (sentinel.prev < 0) {
-            sentinel.prev = a.length - 1;
+        a[sentinel.nextFirst] = item;
+        sentinel.nextFirst -= 1;
+        if (sentinel.nextFirst < 0) {
+            sentinel.nextFirst = a.length - 1;
         }
-
-
         size++;
     }
 
     public void addLast(T item) {
         if (size >= a.length) {
-            resize(size + size / 4);
+            resize(size + size / 4 * 3);
         }
 
-        a[sentinel.next] = item;
-        sentinel.next = (sentinel.next + 1) % a.length;
-
+        a[sentinel.nextLast] = item;
+        sentinel.nextLast = (sentinel.nextLast + 1) % a.length;
         size++;
     }
 
@@ -65,35 +62,27 @@ public class ArrayDeque<T> {
         if (size == 0) {
             return null;
         }
-
-        sentinel.prev = (sentinel.prev + 1) % a.length;
-
+        sentinel.nextFirst = (sentinel.nextFirst + 1) % a.length;
         size--;
-
         if (size <= a.length / 4 && a.length >= 16) {
-            resize(size + size / 4);
+            resize(size + size / 4 * 3);
         }
-
-        return a[sentinel.prev];
+        return a[sentinel.nextFirst];
     }
 
     public T removeLast() {
         if (size == 0) {
             return null;
         }
-
-        sentinel.next = (sentinel.next - 1);
-        if (sentinel.next < 0) {
-            sentinel.next = a.length - 1;
+        sentinel.nextLast = (sentinel.nextLast - 1);
+        if (sentinel.nextLast < 0) {
+            sentinel.nextLast = a.length - 1;
         }
-
         size--;
-
         if (size <= a.length / 4 && a.length >= 16) {
-            resize(size + size / 4);
+            resize(size + size / 4 * 3);
         }
-
-        return a[sentinel.next];
+        return a[sentinel.nextLast];
     }
 
     public T get(int index) {
@@ -101,24 +90,16 @@ public class ArrayDeque<T> {
             return null;
         }
 
-        // right part
-        int rightSize = a.length - sentinel.prev - 1;
-
-        if (rightSize >= index + 1 || sentinel.next > sentinel.prev) {
-            return a[sentinel.prev + index + 1];
-        } else {
-            return a[index - rightSize];
-        }
+        int pos = (sentinel.nextFirst + index + 1) % a.length;
+        return a[pos];
     }
 
     public void printDeque() {
         int num = size;
-
         while (num > 0) {
             num--;
-            sentinel.prev = (sentinel.prev + 1) % a.length;
-
-            System.out.println(a[sentinel.prev]);
+            sentinel.nextFirst = (sentinel.nextFirst + 1) % a.length;
+            System.out.print(a[sentinel.nextFirst] + " ");
         }
     }
 
