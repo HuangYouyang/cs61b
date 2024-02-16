@@ -24,11 +24,8 @@ public class ArrayDeque<T> {
         int startPos = (capacity - size) / 2;
         int cur = startPos;
 
-        int num = size;
-        while (num > 0) {
-            num--;
-            sentinel.nextFirst = (sentinel.nextFirst + 1) % a.length;
-            newA[cur++] = a[sentinel.nextFirst];
+        for (int i = 0; i < size; i++) {
+            newA[cur++] = a[(sentinel.nextFirst + i + 1) % a.length];
         }
         sentinel.nextFirst = startPos - 1;
         sentinel.nextLast = startPos + size;
@@ -64,10 +61,11 @@ public class ArrayDeque<T> {
         }
         sentinel.nextFirst = (sentinel.nextFirst + 1) % a.length;
         size--;
+        T temp = a[sentinel.nextFirst];
         if (size <= a.length / 4 && a.length >= 16) {
             resize(size + size / 4 * 3);
         }
-        return a[sentinel.nextFirst];
+        return temp;
     }
 
     public T removeLast() {
@@ -79,10 +77,11 @@ public class ArrayDeque<T> {
             sentinel.nextLast = a.length - 1;
         }
         size--;
+        T temp = a[sentinel.nextLast];
         if (size <= a.length / 4 && a.length >= 16) {
             resize(size + size / 4 * 3);
         }
-        return a[sentinel.nextLast];
+        return temp;
     }
 
     public T get(int index) {
@@ -95,11 +94,8 @@ public class ArrayDeque<T> {
     }
 
     public void printDeque() {
-        int num = size;
-        while (num > 0) {
-            num--;
-            sentinel.nextFirst = (sentinel.nextFirst + 1) % a.length;
-            System.out.print(a[sentinel.nextFirst] + " ");
+        for (int i = 0; i < size; i++) {
+            System.out.print(a[(sentinel.nextFirst + i + 1) % a.length] + " ");
         }
     }
 
