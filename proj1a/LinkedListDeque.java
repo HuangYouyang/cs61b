@@ -2,11 +2,12 @@ import java.util.LinkedList;
 
 public class LinkedListDeque<T> {
 
-    private class node{
+    private class Node {
         T item;
-        node prev;
-        node next;
-        public node(T item, node prev, node next){
+        Node prev;
+        Node next;
+
+        public Node(T item, Node prev, Node next) {
             this.item = item;
             this.prev = prev;
             this.next = next;
@@ -14,22 +15,21 @@ public class LinkedListDeque<T> {
     }
 
     private int size;
-    private node headSentinel;
-    private node tailSentinel;
+    private Node headSentinel;
+    private Node tailSentinel;
 
     //  Initialize the empty queue
-    public LinkedListDeque(){
+    public LinkedListDeque() {
         this.size = 0;
-        this.headSentinel = new node((T)"null", null ,null);
-        this.tailSentinel = new node((T)"null", null, null);
+        this.headSentinel = new Node((T) "null", null, null);
+        this.tailSentinel = new Node((T) "null", null, null);
     }
 
-    public void addFirst(T item){
-        node curr = new node(item, headSentinel, headSentinel.next);
-        if(headSentinel.next != null){
+    public void addFirst(T item) {
+        Node curr = new Node(item, headSentinel, headSentinel.next);
+        if (headSentinel.next != null) {
             headSentinel.next.prev = curr;
-        }
-        else{
+        } else {
             curr.next = tailSentinel;
             tailSentinel.prev = curr;
         }
@@ -38,12 +38,11 @@ public class LinkedListDeque<T> {
         size++;
     }
 
-    public void addLast(T item){
-        node curr = new node(item, tailSentinel.prev, tailSentinel);
-        if(tailSentinel.prev != null){
+    public void addLast(T item) {
+        Node curr = new Node(item, tailSentinel.prev, tailSentinel);
+        if (tailSentinel.prev != null) {
             tailSentinel.prev.next = curr;
-        }
-        else{
+        } else {
             curr.prev = headSentinel;
             headSentinel.next = curr;
         }
@@ -52,15 +51,14 @@ public class LinkedListDeque<T> {
         size++;
     }
 
-    public T removeFirst(){
-        if(size==0) return null;
+    public T removeFirst() {
+        if (size == 0) return null;
         T res = headSentinel.next.item;
 
         headSentinel.next = headSentinel.next.next;
-        if(headSentinel.next != null){
+        if (headSentinel.next != null) {
             headSentinel.next.prev = headSentinel;
-        }
-        else{
+        } else {
             tailSentinel.prev = null;
         }
 
@@ -69,15 +67,14 @@ public class LinkedListDeque<T> {
         return res;
     }
 
-    public T removeLast(){
-        if(size==0) return null;
+    public T removeLast() {
+        if (size == 0) return null;
         T res = tailSentinel.prev.item;
 
         tailSentinel.prev = tailSentinel.prev.prev;
-        if(tailSentinel.prev != null){
+        if (tailSentinel.prev != null) {
             tailSentinel.prev.next = tailSentinel;
-        }
-        else{
+        } else {
             headSentinel.next = null;
         }
 
@@ -85,11 +82,11 @@ public class LinkedListDeque<T> {
         return res;
     }
 
-    public T get(int index){
-        if(index>size) return (T)"null";
+    public T get(int index) {
+        if (index > size) return (T) "null";
 
-        node curr = headSentinel.next;
-        while(index>0){
+        Node curr = headSentinel.next;
+        while (index > 0) {
             curr = curr.next;
             index--;
         }
@@ -97,32 +94,32 @@ public class LinkedListDeque<T> {
         return curr.item;
     }
 
-    public T getRecursive(int index, node curr){
-        if(index==0) return curr.item;
+    private T getRecursive(int index, Node curr) {
+        if (index == 0) return curr.item;
 
         index--;
         return getRecursive(index, curr.next);
     }
 
-    public T getRecursive(int index){
-        if(index>size) return (T)"null";
+    public T getRecursive(int index) {
+        if (index > size) return (T) "null";
 
         return getRecursive(index, headSentinel.next);
     }
 
-    public int size(){
+    public int size() {
         return size;
     }
 
-    public boolean isEmpty(){
-        return size==0 ? true : false;
+    public boolean isEmpty() {
+        return size == 0 ? true : false;
     }
 
-    public void printDeque(){
-        node curr = headSentinel.next;
+    public void printDeque() {
+        Node curr = headSentinel.next;
 
-        while(curr != null){
-            System.out.println(curr.item+" ");
+        while (curr != null) {
+            System.out.println(curr.item + " ");
             curr = curr.next;
         }
     }
