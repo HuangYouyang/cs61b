@@ -52,7 +52,10 @@ public class LinkedListDeque<T> {
         size++;
     }
 
-    public void removeFirst(){
+    public T removeFirst(){
+        if(size==0) return null;
+        T res = headSentinel.next.item;
+
         headSentinel.next = headSentinel.next.next;
         if(headSentinel.next != null){
             headSentinel.next.prev = headSentinel;
@@ -62,9 +65,14 @@ public class LinkedListDeque<T> {
         }
 
         size--;
+
+        return res;
     }
 
-    public void removeLast(){
+    public T removeLast(){
+        if(size==0) return null;
+        T res = tailSentinel.prev.item;
+
         tailSentinel.prev = tailSentinel.prev.prev;
         if(tailSentinel.prev != null){
             tailSentinel.prev.next = tailSentinel;
@@ -74,6 +82,7 @@ public class LinkedListDeque<T> {
         }
 
         size--;
+        return res;
     }
 
     public T get(int index){

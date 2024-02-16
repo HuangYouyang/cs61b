@@ -53,16 +53,17 @@ public class ArrayDeque<T> {
         size++;
     }
 
-    public void removeFirst(){
-        if(size==0) return;
+    public T removeFirst(){
+        if(size==0) return null;
 
         sentinel.prev = (sentinel.prev+1) % a.length;
 
         size--;
+        return a[sentinel.prev];
     }
 
-    public void removeLast(){
-        if(size==0) return;
+    public T removeLast(){
+        if(size==0) return null;
 
         sentinel.next = (sentinel.next-1);
         if(sentinel.next < 0){
@@ -70,6 +71,7 @@ public class ArrayDeque<T> {
         }
 
         size--;
+        return a[sentinel.next];
     }
 
     public T get(int index){
